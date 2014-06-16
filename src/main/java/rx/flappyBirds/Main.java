@@ -52,7 +52,7 @@ public class Main extends Application {
 		Scene scene = new Scene(root, screenWidth, screenHeight);
 
 		// time
-		Observable<Integer> clock = Observable.timer(500, 10, TimeUnit.MILLISECONDS)
+		Observable<Integer> clock = Observable.timer(500, 30, TimeUnit.MILLISECONDS)
 				.map(x -> 1)
 				.observeOn(new FxScheduler());
 		BehaviorSubject<Integer> scoreObservable = BehaviorSubject.create(this.score);
