@@ -23,10 +23,14 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import nl.tudelft.rx.CoinAcceptor;
+import nl.tudelft.rx.CoinAcceptor_DG600F;
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
+
+import nl.tudelft.rx.Coin;
 
 public class Main extends Application {
 
@@ -165,15 +169,28 @@ public class Main extends Application {
 		flappyB.setScaleX(0.95);
 		flappyB.setScaleY(0.95);
 
-		Observable<List<KeyEvent>> spaceBarEvents = SpacebarObservable.spaceBar(scene)
-				.distinctUntilChanged()
+		//Observable<List<KeyEvent>> spaceBarEvents = SpacebarObservable.spaceBar(scene)
+
+        CoinAcceptor acceptor;
+        try {
+            acceptor = new CoinAcceptor_DG600F()
+                    .setPortname("COM4");
+            acceptor.start();
+        } catch (Exception e) {
+            System.err.println("Something went wrong...");
+            e.printStackTrace();
+            return;
+        }
+
+        Observable<List<Coin>> spaceBarEvents = acceptor.coins()
+                .doOnEach(event -> System.out.println("Coin event!"))
 				.doOnEach(event -> new AudioClip(this.jumpAudio).play())
 				.buffer(clock);
 		Observable<Boolean> impulsForce = spaceBarEvents.map(list -> !list.isEmpty());
 		Observable<Double> velocity = impulsForce.scan(0.0,
 				(vOld, b) -> b ? impuls : vOld - gravity);
 		Observable<Double> yPos = velocity.scan(flappyInitY,
-				(yOld, dv) -> Math.min(yOld - dv, -bottomHeight));
+                (yOld, dv) -> Math.min(yOld - dv, -bottomHeight));
 		Subscription flappySubscription = yPos.subscribe(y -> {
 			flappy.setTranslateY(y);
 			flappyB.setTranslateY(y);
@@ -260,19 +277,19 @@ public class Main extends Application {
 
 		lineBounds.stream()
 				.forEach(line -> Observable
-						.combineLatest(line, flappyBounds, (l, f) -> l.intersects(f))
-						.buffer(2, 1)
-						.filter(hits -> hits.get(0) != hits.get(1))
-						.subscribe(hits -> {
-							if (!hits.get(0)) {
-								scoreObservable.onNext(++this.score);
-								if (this.highScore <= this.score) {
-									this.highScore = this.score;
-									highScoreObservable.onNext(this.highScore);
-								}
-								new AudioClip(this.scoreAudio).play();
-							}
-						}));
+                        .combineLatest(line, flappyBounds, (l, f) -> l.intersects(f))
+                        .buffer(2, 1)
+                        .filter(hits -> hits.get(0) != hits.get(1))
+                        .subscribe(hits -> {
+                            if (!hits.get(0)) {
+                                scoreObservable.onNext(++this.score);
+                                if (this.highScore <= this.score) {
+                                    this.highScore = this.score;
+                                    highScoreObservable.onNext(this.highScore);
+                                }
+                                new AudioClip(this.scoreAudio).play();
+                            }
+                        }));
 
 		stage.setOnShown(event -> new AudioClip(this.startAudio).play());
 		stage.setTitle("Flappy Bird");
