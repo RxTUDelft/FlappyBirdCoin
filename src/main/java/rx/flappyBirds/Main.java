@@ -182,8 +182,7 @@ public class Main extends Application {
             return;
         }
 
-        Observable<List<Coin>> spaceBarEvents = acceptor.coins()
-                .doOnEach(event -> System.out.println("Coin event!"))
+        Observable<List<Coin>> spaceBarEvents = acceptor.coinStream()
 				.doOnEach(event -> new AudioClip(this.jumpAudio).play())
 				.buffer(clock);
 		Observable<Boolean> impulsForce = spaceBarEvents.map(list -> !list.isEmpty());
