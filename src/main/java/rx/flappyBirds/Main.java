@@ -169,21 +169,25 @@ public class Main extends Application {
 		flappyB.setScaleX(0.95);
 		flappyB.setScaleY(0.95);
 
-		//Observable<List<KeyEvent>> spaceBarEvents = SpacebarObservable.spaceBar(scene)
 
-        CoinAcceptor acceptor;
-        try {
-            acceptor = new CoinAcceptor_DG600F()
-                    .setPortname("COM4");
-            acceptor.start();
-        } catch (Exception e) {
-            System.err.println("Something went wrong...");
-            e.printStackTrace();
-            return;
+        Observable<Boolean> mergedEvents = SpacebarObservable.spaceBar(scene).map((e) -> {return true;});
+
+        if(comport != null) {
+            CoinAcceptor acceptor;
+            try {
+                acceptor = new CoinAcceptor_DG600F()
+                        .setPortname(comport);
+                acceptor.start();
+            } catch (Exception e) {
+                System.err.println("Something went wrong...");
+                e.printStackTrace();
+                return;
+            }
+
+            mergedEvents = Observable.merge(mergedEvents, acceptor.coinStream().map((c) -> {System.out.println("coin event");return true;}));
         }
 
-        Observable<List<Coin>> spaceBarEvents = acceptor.coinStream()
-                .doOnEach(event -> System.out.println("Coin event!"))
+        Observable<List<Boolean>> spaceBarEvents = mergedEvents
 				.doOnEach(event -> new AudioClip(this.jumpAudio).play())
 				.buffer(clock);
 		Observable<Boolean> impulsForce = spaceBarEvents.map(list -> !list.isEmpty());
@@ -297,7 +301,12 @@ public class Main extends Application {
 		stage.show();
 	}
 
+    static String comport;
+
 	public static void main(String[] args) {
+        if(args.length > 0) {
+            comport = args[0];
+        }
 		Application.launch();
 	}
 }
