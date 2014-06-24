@@ -34,7 +34,7 @@
         <dependency>
             <groupId>nl.tudelft.rx</groupId>
             <artifactId>rx-coinacceptor</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </dependency>
 	</dependencies>
 
@@ -61,10 +61,18 @@
 			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass><!-- fill in here before running! --></mainClass>
+							<mainClass>rx.flappyBirds.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
