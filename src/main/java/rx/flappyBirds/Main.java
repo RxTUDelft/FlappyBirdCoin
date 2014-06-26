@@ -170,7 +170,7 @@ public class Main extends Application {
 		flappyB.setScaleY(0.95);
 
 
-        Observable<Boolean> mergedEvents = SpacebarObservable.spaceBar(scene).map((e) -> {return true;});
+        Observable<Void> mergedEvents = SpacebarObservable.spaceBar(scene).map((e) -> {return null;});
 
         if(comport != null) {
             CoinAcceptor acceptor;
@@ -179,15 +179,16 @@ public class Main extends Application {
                         .setPortname(comport);
                 acceptor.start();
             } catch (Exception e) {
-                System.err.println("Something went wrong...");
+                System.err.println("Something went wrong while connecting to the coin acceptor...");
                 e.printStackTrace();
                 return;
             }
-
-            mergedEvents = Observable.merge(mergedEvents, acceptor.coinStream().map((c) -> {System.out.println("coin event");return true;}));
+            mergedEvents = Observable.merge(mergedEvents, acceptor.coinStream().map((c) -> {return null;}));
+        } else {
+            System.err.println("Warning: no COM port to connect to was given");
         }
 
-        Observable<List<Boolean>> spaceBarEvents = mergedEvents
+        Observable<List<Void>> spaceBarEvents = mergedEvents
 				.doOnEach(event -> new AudioClip(this.jumpAudio).play())
 				.buffer(clock);
 		Observable<Boolean> impulsForce = spaceBarEvents.map(list -> !list.isEmpty());
