@@ -4,14 +4,21 @@ FlappyBirdCoin
 Flappy Bird clone controlled by [coin acceptor hardware](https://github.com/RxTUDelft/Rx-Coin-Acceptor).
 Forked from [RxJavaGames/FlappyBird](https://github.com/RxTUDelft/RxJavaGames/tree/master/FlappyBird).
 
+## Building
 
-## Usage
+Make sure you have built Rx-Coin-Acceptor and that it is in your local maven repository:
 
-Build with:
+    cd Rx-Coin-Acceptor
+    mvn clean install
 
+You can then build FlappyBirdCoin:
+
+    cd FlappyBirdCoin
     mvn clean package
 
-Run with:
+This will leave a `FlappyBirdCoin-1.0.0-jar-with-dependencies.jar` file in the `target` subfolder
+
+## Running
 
     java -jar FlappyBirdCoin-1.0.0-jar-with-dependencies.jar {COMPORT}
 
