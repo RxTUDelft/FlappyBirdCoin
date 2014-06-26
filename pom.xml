@@ -59,7 +59,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>rx.flappyBirds.Main</mainClass>
+							<mainClass>nl.tudelft.rx.flappybirdcoin.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
