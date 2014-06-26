@@ -1,4 +1,4 @@
-package rx.flappyBirds;
+package nl.tudelft.rx.flappybirdcoin;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;

@@ -1,29 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-	<groupId>FlappyBird</groupId>
-	<artifactId>FlappyBird</artifactId>
-	<version>0.0.1</version>
-	<packaging>jar</packaging>
+
+    <groupId>nl.tudelft.rx</groupId>
+    <artifactId>FlappyBirdCoin</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<targetJdk>1.8</targetJdk>
 	</properties>
-
-	<developers>
-		<developer>
-			<id>richard</id>
-			<name>Richard van Heest</name>
-			<email>richardvanheest@solcon.nl</email>
-			<url>http://www.linkedin.com/pub/richard-van-heest/3a/453/a46</url>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-	</developers>
 
 	<dependencies>
 		<dependency>
